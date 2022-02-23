@@ -1,6 +1,7 @@
 import numpy as np
 from neural_network import neural_network
 from self_driving_car import game
+import random
 
 NUM_INPUT = 3
 episilon = 1
@@ -18,16 +19,20 @@ def deep_q_train(model, params):
     observe = 500  # number of frames it is going to observe
     training_frames = 1000  # number of frames it is going to play
     # will need to increase these frames for better result
-
+    replay = []
     # first observe then train
     while t < training_frames:
         t += 1
         # let the game play for a while to learn about the environmnent
         if (t > observe):
+            print("Game #: %s" % (model.i,))
+            minibatch = random.sample(replay, batch_size)
+            X_train, y_train = minibatch_process(model, minibatch)
+            model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=1, verbose=1)
+    #state = new_state
     # train the game using the finding of the observation, update the weights, and keep observing
 
-def minibatch_process(model, minibatch,params):
-    batchSize = params["batchSize"]
+def minibatch_process(model, minibatch):
     X_train = []  # state s of each memory
     y_train = []  # updates target values from minibatch
     for memory in minibatch:
@@ -48,9 +53,7 @@ def minibatch_process(model, minibatch,params):
 
     X_train = np.array(X_train)
     y_train = np.array(y_train)
-    print("Game #: %s" % (model.i,))
-    model.fit(X_train, y_train, batch_size=batchSize, nb_epoch=1, verbose=1)
-    #state = new_state
+
     
     return X_train,y_train
 
