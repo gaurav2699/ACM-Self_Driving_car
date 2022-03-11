@@ -114,7 +114,7 @@ class Game:
 
 
         driving_direction = Vec2d(1, 0).rotated(self.car_body.angle)
-        self.car_body.velocity =   10 * driving_direction
+        self.car_body.velocity =   100 * driving_direction
 
         
         # Update the screen and stuff.
